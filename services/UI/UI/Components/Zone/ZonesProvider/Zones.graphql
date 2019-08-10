@@ -1,0 +1,7 @@
+# import "UI/GraphQL/Zone/Zone.graphql"
+
+query Zones {
+  Zones {
+    ...Zone
+  }
+}

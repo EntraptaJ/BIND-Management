@@ -1,0 +1,7 @@
+# import "UI/GraphQL/Item.graphql"
+
+{
+  getItems {
+    ...Item
+  }
+}

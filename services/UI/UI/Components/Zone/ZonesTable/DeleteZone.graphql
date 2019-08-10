@@ -1,0 +1,5 @@
+mutation DeleteZone($input: DeleteZoneInput!) {
+  deleteZone(input: $input) {
+    success
+  }
+}

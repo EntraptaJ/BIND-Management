@@ -1,0 +1,3 @@
+fragment Item on Item {
+  name
+}

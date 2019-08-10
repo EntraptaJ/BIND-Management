@@ -1,0 +1,12 @@
+# import "UI/GraphQL/Zone/ValueRRRecords.graphql"
+
+fragment Zone on Zone {
+  domain
+  A {
+    ...ValueRRRecords
+  }
+  NS {
+    ...ValueRRRecords
+  }
+  userPermission
+}

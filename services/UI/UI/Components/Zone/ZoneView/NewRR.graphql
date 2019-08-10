@@ -1,0 +1,7 @@
+# import "UI/GraphQL/Zone/Zone.graphql"
+
+mutation newRR($input: NewRR!) {
+  newRR(input: $input) {
+    ...Zone
+  }
+}

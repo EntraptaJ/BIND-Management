@@ -1,0 +1,8 @@
+query Users($search: String) {
+  users(username: $search) {
+      _id
+  username
+  email
+  fullName
+  }
+}

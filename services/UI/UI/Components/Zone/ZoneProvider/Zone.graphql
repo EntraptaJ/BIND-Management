@@ -1,0 +1,11 @@
+# import "UI/GraphQL/Zone/Zone.graphql"
+# import "UI/GraphQL/Zone/ValueRRTypeRecords.graphql"
+
+query Zone($domainName: String!) {
+  Zone(zoneName: $domainName) {
+    ...Zone
+    RRs {
+      ...ValueRRTypeRecords
+    }
+  }
+}

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  NS1: 
+    image: resystit/bind9:latest
+    restart: unless-stopped
+    ports:
+      - 53:53/udp
+    volumes:
+      - '${PWD}/services/API/named.conf:/etc/bind/named.conf'
+      - '${PWD}/services/API/zones:/zones/'
+  db: 
+    image: mvertes/alpine-mongo
+    ports:
+      - 27017:27017

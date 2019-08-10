@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch API and Debug",
+      "type": "node",
+      "request": "attach",
+      "preLaunchTask": "API Debug",
+      "port": 1234,
+      "restart": true
+    },
+    {
+      "name": "Launch UI and Debug",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/services/UI",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "watch"],
+      "port": 1235,
+      "env": { "TS_NODE_PROJECT": "bin/tsconfig.json", "NODE_ENV": "development", "BASEURL": "http://192.168.1.132" }
+    }
+  ]
+}

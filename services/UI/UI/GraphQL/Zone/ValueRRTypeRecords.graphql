@@ -1,0 +1,6 @@
+fragment ValueRRTypeRecords on RRStuff {
+  host
+  value
+  ttl
+  type
+}

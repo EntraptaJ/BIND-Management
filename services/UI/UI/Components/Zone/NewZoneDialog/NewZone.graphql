@@ -1,0 +1,7 @@
+# import "UI/GraphQL/Zone/Zone.graphql"
+
+mutation NewZone($input: NewZone!) {
+  newZone(input: $input) {
+    ...Zone
+  }
+}

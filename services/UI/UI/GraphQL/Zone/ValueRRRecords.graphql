@@ -1,0 +1,5 @@
+fragment ValueRRRecords on ValueRR {
+  host
+  value
+  ttl
+}
