@@ -32,6 +32,7 @@ export function AppHead({ sources, sheets }: AppHeadProps): React.ReactElement {
       <meta name='msapplication-TileColor' content='#da532c' />
       <meta name='theme-color' content='#2196f3' />
       <meta charSet='UTF-8' />
+      <title>BIND Management</title>
       <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0' name='viewport' />
       {sources && sources.map(({ src, type }, index) => <link rel='preload' href={src} as={type} key={index} />)}
       {sources &&

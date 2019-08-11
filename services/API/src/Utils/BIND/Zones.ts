@@ -108,7 +108,7 @@ interface RRParams {
 
 export const removeRR = (Zone: ZONE, { type, RR }: RRParams): void => {
   if (!Zone[type]) return;
-  Zone[type] = Zone[type].filter(rr => JSON.stringify(rr) !== JSON.stringify(RR))
+  Zone[type] = Zone[type].filter(rr => JSON.stringify(rr) !== JSON.stringify(RR));
 };
 
 interface UpdateRRParams extends RRParams {
@@ -128,5 +128,5 @@ export const updateRR = (Zone: ZONE, { type, RR, NewRR }: UpdateRRParams): void 
  */
 export const NewRR = (Zone: ZONE, { type, RR }: RRParams): void => {
   if (!Zone[type]) Zone[type] = [RR];
-  else Zone[type] = [...Zone[type], RR]
+  else Zone[type] = [...Zone[type], RR];
 };

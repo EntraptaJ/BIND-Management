@@ -32,31 +32,35 @@ export const performAuthorization = async (
 
   const keyAuthorization = await ACME.getChallengeKeyAuthorization(challenge);
 
-  // Add TXT record
-  await generateTXTRecord(Zone, { host, value: keyAuthorization, ttl: 10 });
+  try {
+    // Add TXT record
+    await generateTXTRecord(Zone, { host, value: keyAuthorization, ttl: 10 });
 
-  await saveZone(Zone, Zone.zoneFile);
+    await saveZone(Zone, Zone.zoneFile);
 
-  await restartBIND(NSContainer);
+    await restartBIND(NSContainer);
 
-  /* Verify that challenge is satisfied */
-  await ACME.verifyChallenge(Auth, challenge);
+    /* Verify that challenge is satisfied */
+    await ACME.verifyChallenge(Auth, challenge);
 
-  /* Notify ACME provider that challenge is satisfied */
-  await ACME.completeChallenge(challenge);
+    /* Notify ACME provider that challenge is satisfied */
+    await ACME.completeChallenge(challenge);
 
-  /* Wait for ACME provider to respond with valid status */
-  await ACME.waitForValidStatus(challenge);
-  // Remove DNS Record
-  await removeTXTRecord(Zone, { host, value: keyAuthorization, ttl: 10 });
+    /* Wait for ACME provider to respond with valid status */
+    await ACME.waitForValidStatus(challenge);
+  } catch {
+  } finally {
+    try {
+      await removeTXTRecord(Zone, { host, value: keyAuthorization, ttl: 10 });
+      await saveZone(Zone, Zone.zoneFile);
 
-  await saveZone(Zone, Zone.zoneFile);
-
-  await restartBIND(NSContainer);
+      await restartBIND(NSContainer);
+    } catch {}
+  }
 };
 
 export const generateDomains = (subDomains: string[], domainName: string): string[] => {
-  const Domains: string[] = [];
+  const Domains: string[] = [domainName];
   for (const subDomain of subDomains) {
     Domains.push(`${subDomain}.${domainName}`);
   }

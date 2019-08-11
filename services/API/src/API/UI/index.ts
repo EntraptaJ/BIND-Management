@@ -26,7 +26,7 @@ export default class SettingsResolver {
     const { username, password } = input;
     await Promise.all([
       UserModel.create({ username, password, role: ['User', 'Admin'] }),
-      Settings.create({ id: 1, appName: input.appName })
+      Settings.create({ id: 1, appName: input.appName, publicNSHostname: input.publicNSHostname })
     ]);
     return true;
   }

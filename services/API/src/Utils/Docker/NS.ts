@@ -14,8 +14,8 @@ export const restartBIND = async (containerName: string): Promise<boolean> => {
   const opts = {
     filters: `{"label": ["com.docker.compose.service=${containerName}"]}`
   };
-  const conts = await docker.listContainers(opts);
-  const cont = conts.find(a => a.Image === 'resystit/bind9:latest') as Docker.ContainerInfo;
+  const containers = await docker.listContainers(opts);
+  const cont = containers.find(a => a.Image === 'resystit/bind9:latest') as Docker.ContainerInfo;
   await docker.getContainer(cont.Id).restart();
   return true;
 };

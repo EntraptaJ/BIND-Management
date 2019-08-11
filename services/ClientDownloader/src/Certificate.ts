@@ -3,6 +3,7 @@ import { outputFile, outputJSON, readJSON, pathExists } from 'fs-extra';
 import ApolloClient from 'apollo-client';
 import { Base64 } from 'js-base64';
 import gql from 'graphql-tag';
+import Docker from 'dockerode'
 
 const certificatePath = process.env['CERT_PATH'] || '';
 const configPath = `${certificatePath}config.json`;
@@ -40,11 +41,23 @@ export const saveCertificate = async (domainName: string, { certificate, privKey
   const CertificatePath = `${certificatePath}${domainName}.pem`;
   const KeyPath = `${certificatePath}${domainName}.key`;
 
-  return Promise.all([
+  await Promise.all([
     outputFile(CertificatePath, certificate),
     outputFile(KeyPath, privKey),
     outputJSON(configPath, { updatedDate })
   ]);
+
+  const docker = new Docker({
+    socketPath: '/var/run/docker.sock',
+    version: 'v1.39'
+  });
+  const opts = {
+    filters: `{"label": ["com.docker.compose.service=web"]}`
+  };
+  const containers = await docker.listContainers(opts);
+  const cont = containers.find(a => a.Image === 'registry.kristianjones.xyz/kristianfjones/caddy-docker-ci:latest') as Docker.ContainerInfo;
+  await docker.getContainer(cont.Id).restart();
+
 };
 
 interface Certificate {

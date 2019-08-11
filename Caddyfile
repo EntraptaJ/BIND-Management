@@ -1,0 +1,9 @@
+https://testing.kristianjones.dev {
+  tls /SSL/testing.kristianjones.dev.pem /SSL/testing.kristianjones.dev.key
+
+  proxy /graphql http://api {
+    websocket
+  }
+
+  proxy / http://ui:81
+}

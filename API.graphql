@@ -217,7 +217,7 @@ enum TSIGALGORITHM {
 
 input UpdateACMEInput {
   domainName: String!
-  subDomains: [String!]!
+  subDomains: [String]!
 }
 
 type User {

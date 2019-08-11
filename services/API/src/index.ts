@@ -27,6 +27,7 @@ const startWeb = async (): Promise<Koa> => {
   const apiServer = new ApolloServer({
     schema,
     introspection: true,
+    playground: true,
     context: async ({ ctx, connection }): Promise<Context> => {
       if (connection) {
         if (!connection.context.authToken) return { user: undefined };

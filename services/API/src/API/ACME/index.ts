@@ -1,6 +1,6 @@
 // API/src/API/SSL/index.tsx
 import { Resolver, Mutation, Authorized, Arg, Ctx, ForbiddenError, Query, Root, Subscription } from 'type-graphql';
-import { ACMEAccount, ACMEAccounts, pubSub, NewACMEInput, GetLastUpdatedInput, UpdateACMEInput } from '../../Models/ACME';
+import { ACMEAccount, ACMEAccounts, NewACMEInput, GetLastUpdatedInput, UpdateACMEInput } from '../../Models/ACME';
 import { Context } from '../Context';
 import { generateDomains } from '../../Utils/ACME';
 import { InstanceType } from 'typegoose';
@@ -20,7 +20,6 @@ export default class SSLResolver {
     const domains = generateDomains(subDomains, domainName);
 
     const ACMEAccount = await generateCertificate({ domains, domainName, user, Zone, email });
-    pubSub.publish(domainName, ACMEAccount);
 
     return ACMEAccount.save();
   }
@@ -79,8 +78,6 @@ export default class SSLResolver {
     const domains = generateDomains(subDomains, domainName);
 
     const ACMEAccount = await generateCertificate({ domains, domainName, user, Zone });
-
-    pubSub.publish(domainName, ACMEAccount);
 
     return ACMEAccount.save();
   }

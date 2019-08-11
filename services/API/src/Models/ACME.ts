@@ -73,7 +73,7 @@ export class UpdateACMEInput {
   @Field()
   public domainName: string;
 
-  @Field(type => [String])
+  @Field(type => [String], { nullable: 'items' })
   public subDomains: string[];
 }
 

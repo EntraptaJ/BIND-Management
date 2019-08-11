@@ -1,14 +1,42 @@
 version: '3'
 services:
+  web:
+    image: registry.kristianjones.xyz/kristianfjones/caddy-docker-ci:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - '${PWD}/Caddyfile:/etc/Caddyfile'
+      - '${PWD}/SSL/:/SSL/'
   NS1: 
     image: resystit/bind9:latest
     restart: unless-stopped
     ports:
       - 53:53/udp
     volumes:
-      - '${PWD}/services/API/named.conf:/etc/bind/named.conf'
-      - '${PWD}/services/API/zones:/zones/'
+      - '${PWD}/named.conf:/etc/bind/named.conf'
+      - '${PWD}/services/API/zones/:/zones/'
   db: 
     image: mvertes/alpine-mongo
     ports:
       - 27017:27017
+  api:
+    image: registry.kristianjones.xyz/kristianfjones/bind-management:API
+    volumes:
+      - '${PWD}/named.conf:/named.conf'
+      - zones:/zones/
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NS=NS1
+      - DB_HOST=db
+      - NAMED_PATH=/named.conf
+      - ZONE_PATH=/zones
+  ui:
+    image: registry.kristianjones.xyz/kristianfjones/bind-management:UI
+    environment: 
+      - API_HOST=api
+      - BASEURL=https://testing.kristianjones.dev
+
+volumes:
+  zones:
+  

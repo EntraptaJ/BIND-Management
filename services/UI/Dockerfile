@@ -3,9 +3,10 @@ WORKDIR /app
 COPY package.json package-lock.json tsconfig.json .babelrc ./
 RUN npm install
 COPY ./server/ ./server/
+COPY ./@types/ ./@types/
+COPY ./icons/ ./icons/
 COPY ./UI/ ./UI/
 COPY ./bin/ ./bin/
-COPY ./icons/ ./icons/
 COPY ./public/ ./public/
 RUN NODE_ENV=production npm run build
 

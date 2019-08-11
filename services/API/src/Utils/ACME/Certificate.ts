@@ -4,7 +4,7 @@ import { InstanceType } from 'typegoose';
 import { Base64 } from 'js-base64';
 import { User, BINDZONE } from '../../Models/User';
 import { newOrder, performAuthorization } from '.';
-import { ACMEAccounts, ACMEAccount } from '../../Models/ACME';
+import { ACMEAccounts, ACMEAccount, pubSub } from '../../Models/ACME';
 
 interface GenerateCertificateArgs {
   domains: string[];
@@ -29,15 +29,17 @@ export const generateCertificate = async ({
   if (ACMEAccount) {
     ACME = new Client({
       accountKey: ACMEAccount.privKey.buffer as Buffer,
-      directoryUrl: directory.letsencrypt.staging,
+      directoryUrl: directory.letsencrypt.production,
       accountUrl: ACMEAccount.accountURL
     });
 
     await ACME.createAccount({ onlyReturnExisting: true });
+
+    ACMEAccount.domains = domains;
   } else {
     const privACMEKey = await forge.createPrivateKey(4096);
     console.log(`Generate `, privACMEKey);
-    ACME = new Client({ accountKey: privACMEKey, directoryUrl: directory.letsencrypt.staging });
+    ACME = new Client({ accountKey: privACMEKey, directoryUrl: directory.letsencrypt.production });
     await ACME.createAccount({ termsOfServiceAgreed: true, contact: [`mailto:${email}`] });
     ACMEAccount = new ACMEAccounts({
       user: user._id,
@@ -71,6 +73,8 @@ export const generateCertificate = async ({
     updatedDate: new Date(),
     privKey: Base64.encode(key.toString())
   };
+
+  pubSub.publish(domainName, ACMEAccount);
 
   return ACMEAccount;
 };
